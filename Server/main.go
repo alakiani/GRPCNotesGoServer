@@ -17,13 +17,14 @@ const (
 // server is used to implement helloworld.GreeterServer.
 type server struct{}
 
-func (s *server) List(ctx context.Context, in *pb.Empty) (*pb.NoteList, error) {
-	log.Printf("NoteId")
-	note1 := pb.Note{Id: "1", Title: "E", Content: "DDD"}
+func (s *server) List(ctx *pb.Empty, in pb.NoteService_ListServer) error {
+	note1 := pb.Note{Id: "2", Title: "E", Content: "DDD"}
 	note2 := pb.Note{Id: "1", Title: "E", Content: "DDD"}
-
 	notes := []*pb.Note{&note1, &note2}
-	return &pb.NoteList{Notes: notes}, nil
+	noteList := pb.NoteList{Notes: notes}
+	in.Send(&noteList)
+	log.Printf("NoteId")
+	return nil
 }
 
 func (s *server) Get(ctx context.Context, in *pb.NoteRequestId) (*pb.Note, error) {
